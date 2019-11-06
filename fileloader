@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import sys
+import re
+
+if len(sys.argv) == 1:    # No file is given
+    filename = input("Please enter name of the file which should be opened: ")
+elif len(sys.argv) == 2:	# The file has been added
+    filename = sys.argv[1]
+else:
+    sys.stderr.write("Error file not found")
+    sys.exit(1)
+infile = open(filename, 'r')
+twodna = dict()
+for line in infile:
+    if line.startswith('>'):
+        REresult = re.search("^\>\w+\d+\.CDS\.\d", line)   
+    else:
+        if REresult.group(0) in twodna:
+            twodna[REresult.group(0)] += line[:-1]
+        else:
+            twodna[REresult.group(0)] = ''
+            twodna[REresult.group(0)] += line[:-1]
+if len(twodna) != 2:
+    print('Error the file loaded is not containing two fasta-sequences.\n The program will be exicuted')
+    sys.exit
